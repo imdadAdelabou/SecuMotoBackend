@@ -1,5 +1,6 @@
 require("dotenv").config()
 const ethers = require("ethers");
+const res = require("express/lib/response");
 const { network } = require("hardhat");
 const API_KEY = process.env.ALCHEMY_API_KEY;
 const RINKEBY_PRIVATE_KEY = process.env.RINKEBY_PRIVATE_KEY;
@@ -30,6 +31,27 @@ exports.getUser = async(cardId) => {
         const user = await secuMotoContract.getUser(cardId);
         console.log("User Data ===>>>> " + user);
         return user;
+    } catch (e) {
+        throw e;
+    }
+}
+
+exports.addMoto = async(cardId, chassId) => {
+    try {
+        const tx = await secuMotoContract.addMotoToUser(cardId, chassId);
+        await tx.wait();
+        console.log(tx);
+        return (true);
+    } catch (e) {
+        throw e;
+    }
+}
+
+exports.getMotosFromUser = async(cardId) => {
+    try {
+        const result = await secuMotoContract.getMotosFromUser(cardId);
+        console.log(result);
+        return result;
     } catch (e) {
         throw e;
     }
